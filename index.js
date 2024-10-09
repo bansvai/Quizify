@@ -40,10 +40,7 @@ const database = {
       answer: "b",
     },
   ],
-};
-
-const leaderboard = {
-  data: [
+  leaderboard: [
     {
       name: "Kajal",
       score: 3,
@@ -59,6 +56,11 @@ const leaderboard = {
   ],
 };
 
+/**
+ * Simulates the quiz game, asking questions and validating answers.
+ *
+ * @param {Object} database - The database object containing quiz questions and leaderboard.
+ */
 function Quiz(database) {
   for (
     let questionIndex = 0;
@@ -73,20 +75,37 @@ function Quiz(database) {
         `${optionKey}. ${database.questions[questionIndex].options[optionKey]}`
       );
     }
+
     let userAnswer = question("Choose an option - ").toLowerCase();
+
+    // Ensures user gives a valid input
     while (!isValidAnswer(userAnswer)) {
       userAnswer = question(
         kuler("No such option. Please choose a valid option - ", "#dc2626")
       ).toLowerCase();
     }
+
+    // Validates the user's answer
     validateAnswer(userAnswer, database.questions[questionIndex].answer);
   }
 }
 
+/**
+ * Checks if the user's answer is valid (one of 'a', 'b', 'c', 'd').
+ *
+ * @param {string} userAnswer - The answer provided by the user.
+ * @return {boolean} True if the answer is valid, false otherwise.
+ */
 function isValidAnswer(userAnswer) {
   return ["a", "b", "c", "d"].includes(userAnswer);
 }
 
+/**
+ * Validates the user's answer and provides feedback on whether the answer was correct or not.
+ *
+ * @param {string} userAnswer - The answer provided by the user.
+ * @param {string} correctAnswer - The correct answer for the current question.
+ */
 function validateAnswer(userAnswer, correctAnswer) {
   if (userAnswer === correctAnswer) {
     console.log(kuler("Correct Answer", "#65a30d"));
@@ -97,15 +116,30 @@ function validateAnswer(userAnswer, correctAnswer) {
   }
 }
 
+/**
+ * Updates the leaderboard with the new user's score and displays the leaderboard in sorted order.
+ */
 function updateLeaderBoard() {
-  leaderboard.data.push({ name, score });
-  const sortedLeaderBoard = leaderboard.data.sort((a, b) => b.score - a.score);
+  // Adds new user and their score to the leaderboard
+  database.leaderboard.push({ name, score });
+
+  // Sorts the leaderboard in descending order based on score
+  const sortedLeaderBoard = database.leaderboard.sort(
+    (a, b) => b.score - a.score
+  );
+
+  // Display leaderboard
   console.log("LeaderBoard 👑\n\nName\tScore");
   for (let leader of sortedLeaderBoard) {
     console.log(`${leader.name}\t ${leader.score}`);
   }
 }
 
+// Start the Quiz
 Quiz(database);
+
+// Display the user's score
 console.log(kuler(`\nYour score is ${score}\n`, "#9333ea"));
+
+// Update and display the leaderboard
 updateLeaderBoard();
