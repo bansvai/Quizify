@@ -1,3 +1,5 @@
+const question = require("readline-sync").question;
+
 // Creating Database
 const database = {
   questions: [
@@ -49,6 +51,25 @@ function Quiz(database) {
         `${optionKey}. ${database.questions[questionIndex].options[optionKey]}`
       );
     }
+    let userAnswer = question("Choose an option - ").toLowerCase();
+    while (!isValidAnswer(userAnswer)) {
+      userAnswer = question(
+        "No such option. Please choose a valid option - "
+      ).toLowerCase();
+    }
+    validateAnswer(userAnswer, database.questions[questionIndex].answer);
+  }
+}
+
+function isValidAnswer(userAnswer) {
+  return ["a", "b", "c", "d"].includes(userAnswer);
+}
+
+function validateAnswer(userAnswer, correctAnswer) {
+  if (userAnswer === correctAnswer) {
+    console.log("Correct Answer");
+  } else {
+    console.log(`Incorrect Answer. The correct answer is ${correctAnswer}`);
   }
 }
 
