@@ -1,4 +1,6 @@
 const question = require("readline-sync").question;
+let score = 0;
+const name = question("Your Name - ");
 
 // Creating Database
 const database = {
@@ -37,6 +39,23 @@ const database = {
   ],
 };
 
+const leaderboard = {
+  data: [
+    {
+      name: "Kajal",
+      score: 3,
+    },
+    {
+      name: "Sandhya",
+      score: 1,
+    },
+    {
+      name: "Tanmay",
+      score: 2,
+    },
+  ],
+};
+
 function Quiz(database) {
   for (
     let questionIndex = 0;
@@ -68,9 +87,21 @@ function isValidAnswer(userAnswer) {
 function validateAnswer(userAnswer, correctAnswer) {
   if (userAnswer === correctAnswer) {
     console.log("Correct Answer");
+    score++;
   } else {
     console.log(`Incorrect Answer. The correct answer is ${correctAnswer}`);
   }
 }
 
+function updateLeaderBoard() {
+  leaderboard.data.push({ name, score });
+  const sortedLeaderBoard = leaderboard.data.sort((a, b) => b.score - a.score);
+  console.log("LeaderBoard\n\nName\tScore");
+  for (let leader of sortedLeaderBoard) {
+    console.log(`${leader.name}\t ${leader.score}`);
+  }
+}
+
 Quiz(database);
+console.log(`\nYour score is ${score}\n`);
+updateLeaderBoard();
